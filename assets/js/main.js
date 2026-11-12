@@ -158,6 +158,32 @@
     render();
   });
 
+  /* ---------- Cases filter ---------- */
+  var cgrid = document.querySelector('.js-ccards');
+  if (cgrid) {
+    var selects = document.querySelectorAll('.js-cf');
+    var counter = document.querySelector('.js-cf-count');
+    var plural = function (n) {
+      var m10 = n % 10, m100 = n % 100;
+      return n + ' ' + (m10 === 1 && m100 !== 11 ? 'кейс' : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? 'кейса' : 'кейсов');
+    };
+    var empty = document.createElement('p');
+    empty.className = 'ccards__empty';
+    empty.textContent = 'По этому сочетанию кейсов пока нет — расскажите о задаче, и мы покажем похожий опыт.';
+    var apply = function () {
+      var f = {};
+      selects.forEach(function (s) { if (s.value) f[s.dataset.key] = s.value; });
+      var n = 0;
+      cgrid.querySelectorAll('.ccard').forEach(function (c) {
+        var ok = (!f.industry || c.dataset.industry === f.industry) && (!f.service || c.dataset.service === f.service);
+        c.hidden = !ok; if (ok) n++;
+      });
+      counter.textContent = plural(n);
+      if (n) empty.remove(); else cgrid.appendChild(empty);
+    };
+    selects.forEach(function (s) { s.addEventListener('change', apply); });
+  }
+
   /* ---------- FAQ: one open at a time per grid ---------- */
   document.querySelectorAll('.faq__grid, .js-accordion').forEach(function (grid) {
     grid.addEventListener('toggle', function (e) {
