@@ -184,6 +184,23 @@
     selects.forEach(function (s) { s.addEventListener('change', apply); });
   }
 
+  /* ---------- Blog: rubric chips & cards filter ---------- */
+  var posts = document.querySelector('.js-posts');
+  if (posts) {
+    var chipsEls = document.querySelectorAll('.bchip');
+    var setCat = function (cat) {
+      chipsEls.forEach(function (c) { c.classList.toggle('is-active', c.dataset.cat === cat); c.setAttribute('aria-pressed', String(c.dataset.cat === cat)); });
+      posts.querySelectorAll('.post').forEach(function (p) { p.hidden = !(cat === 'all' || p.dataset.cat === cat); });
+    };
+    chipsEls.forEach(function (c) { c.addEventListener('click', function () { setCat(c.dataset.cat); }); });
+    document.querySelectorAll('.js-rubric').forEach(function (r) {
+      r.addEventListener('click', function () {
+        setCat(r.dataset.cat);
+        document.getElementById('fresh').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  }
+
   /* ---------- FAQ: one open at a time per grid ---------- */
   document.querySelectorAll('.faq__grid, .js-accordion').forEach(function (grid) {
     grid.addEventListener('toggle', function (e) {
