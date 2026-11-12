@@ -35,9 +35,11 @@ fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
 for (const f of fs.readdirSync(path.join(src, 'pages'))) {
   if (!f.endsWith('.html')) continue;
-  const name = f === 'index.html' ? 'index.html' : path.join(f.replace(/\.html$/, ''), 'index.html');
+  // services.seo.html -> services/seo/index.html
+  const segs = f === 'index.html' ? [] : f.replace(/\.html$/, '').split('.');
+  const name = path.join(...segs, 'index.html');
   // {{root}} -> relative path to site root, so the build works both on a domain root and on a GitHub Pages subpath
-  const rootRel = f === 'index.html' ? './' : '../';
+  const rootRel = segs.length ? '../'.repeat(segs.length) : './';
   const out = expand(fs.readFileSync(path.join(src, 'pages', f), 'utf8')).replace(/\{\{root\}\}/g, rootRel);
   fs.mkdirSync(path.dirname(path.join(dist, name)), { recursive: true });
   fs.writeFileSync(path.join(dist, name), out);
@@ -47,4 +49,17 @@ for (const f of ['php']) {
   const p = path.join(root, f);
   if (fs.existsSync(p)) copyDir(p, path.join(dist, f));
 }
+// guard: empty or missing assets referenced by pages
+const bad = [];
+for (const f of fs.readdirSync(path.join(root, 'assets', 'img'))) if (fs.statSync(path.join(root, 'assets', 'img', f)).size === 0) bad.push('empty: ' + f);
+(function scan(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) { if (e.name !== 'assets') scan(p); continue; }
+    if (!p.endsWith('.html')) continue;
+    for (const m of fs.readFileSync(p, 'utf8').matchAll(/(?:src|href)="([^"#?:]+\.(?:png|svg|jpg|webp|css|js))"/g))
+      if (!fs.existsSync(path.resolve(path.dirname(p), m[1]))) bad.push('missing: ' + m[1] + ' in ' + path.relative(dist, p));
+  }
+})(dist);
+if (bad.length) { console.error(bad.join('\n')); process.exitCode = 1; }
 console.log('built ->', dist);

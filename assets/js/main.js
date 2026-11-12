@@ -104,6 +104,60 @@
     showCat('money');
   }
 
+  /* ---------- Audit quiz (services) ---------- */
+  // Вопрос 1 — из макета. Вопросы 2–5 и логика рекомендаций — черновик, требует проверки заказчиком.
+  var SVC = {
+    marketing: ['Маркетинг', 'services/marketing/'], seo: ['SEO', 'services/seo/'], web: ['Сайты и веб-сервисы', 'services/development/'],
+    ppc: ['Контекстная реклама', 'services/ppc/'], target: ['Таргетированная реклама', 'services/target/'], smm: ['SMM', 'services/smm/'],
+    maps: ['Реклама на картах', 'services/maps/'], promo: ['ПромоСтраницы', 'services/promopages/'], serm: ['Управление репутацией бренда', 'services/serm/']
+  };
+  var QUIZ = [
+    ['Что сейчас главная проблема?', [['Мало заявок', 'ppc maps seo'], ['Заявки есть, продаж нет', 'marketing web'], ['Заявки слишком дорогие', 'marketing ppc target'], ['Нас плохо знают', 'smm promo serm']]],
+    ['Какой у вас бизнес?', [['Услуги рядом с клиентом', 'maps serm'], ['Интернет-магазин', 'seo ppc'], ['B2B и сложный продукт', 'promo ppc marketing'], ['Образование и онлайн-курсы', 'target smm promo']]],
+    ['Что с сайтом?', [['Есть и приносит заявки', 'seo'], ['Есть, но заявок мало', 'web'], ['Только соцсети и карточки', 'web smm'], ['Пока ничего нет', 'web']]],
+    ['Какой рекламный бюджет в месяц?', [['До 50 000 ₽', 'maps'], ['50–150 тысяч ₽', 'ppc'], ['150–500 тысяч ₽', 'ppc target'], ['Больше 500 тысяч ₽', 'marketing promo']]],
+    ['Как вы считаете результат?', [['Сквозная аналитика', ''], ['Метрика и CRM отдельно', 'marketing'], ['По ощущениям', 'marketing'], ['Никак не считаем', 'marketing']]]
+  ];
+  document.querySelectorAll('.js-quiz').forEach(function (box) {
+    var step = 0, score = {}, picked = [];
+    function render() {
+      var bars = '<div class="quiz__bars">' + QUIZ.map(function (_, i) { return '<i class="' + (i <= step ? 'is-on' : '') + '"></i>'; }).join('') + '</div>';
+      if (step < QUIZ.length) {
+        var q = QUIZ[step];
+        box.innerHTML = '<p class="quiz__progress">Вопрос ' + (step + 1) + ' из ' + QUIZ.length + '</p>' + bars +
+          '<p class="quiz__q">' + q[0] + '</p><div class="quiz__answers">' +
+          q[1].map(function (a, i) { return '<button type="button" class="quiz__a" data-i="' + i + '">' + a[0] + '</button>'; }).join('') +
+          '</div><p class="quiz__hint">Выберите один вариант, чтобы перейти к следующему вопросу</p>';
+        box.querySelectorAll('.quiz__a').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var a = q[1][+b.dataset.i];
+            b.classList.add('is-active');
+            picked.push(q[0] + ' — ' + a[0]);
+            a[1].split(' ').filter(Boolean).forEach(function (k, n) { score[k] = (score[k] || 0) + 3 - Math.min(n, 2); });
+            setTimeout(function () { step++; render(); }, 180);
+          });
+        });
+      } else {
+        var top = Object.keys(score).sort(function (a, b) { return score[b] - score[a]; }).slice(0, 3);
+        if (!top.length) top = ['marketing'];
+        box.innerHTML = '<p class="quiz__progress">Готово</p>' + bars + '<div class="quiz__result"><h3>С этого стоит начать</h3><ul>' +
+          top.map(function (k) { return '<li><a class="tag" href="' + root + SVC[k][1] + '">' + SVC[k][0] + '</a></li>'; }).join('') +
+          '</ul><p>Это предварительный вывод по пяти ответам. Точный план составим, когда посмотрим ваши цифры — разбор бесплатный.</p>' +
+          '<a class="btn2 btn2--hot" href="#request">Отправить ответы и получить разбор</a><br><button type="button" class="quiz__back">Пройти заново</button></div>';
+        box.querySelector('.quiz__back').addEventListener('click', function () { step = 0; score = {}; picked = []; render(); });
+        // prefill the lead form
+        var form = document.querySelector('.js-lead-form');
+        if (form) {
+          form.querySelectorAll('input[name="interest[]"]').forEach(function (c) {
+            c.checked = top.some(function (k) { return SVC[k][0] === c.value; });
+          });
+          if (form.elements.task && !form.elements.task.value) form.elements.task.value = 'Ответы опроса:\n' + picked.join('\n');
+        }
+      }
+    }
+    render();
+  });
+
   /* ---------- FAQ: one open at a time per grid ---------- */
   document.querySelectorAll('.faq__grid, .js-accordion').forEach(function (grid) {
     grid.addEventListener('toggle', function (e) {
