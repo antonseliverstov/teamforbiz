@@ -201,11 +201,51 @@
     });
   }
 
-  /* ---------- FAQ: one open at a time per grid ---------- */
+  /* ---------- Tabs (geo formats demo on maps page) ---------- */
+  // Описание формата №1 — из макета; остальные — черновики, требуют проверки.
+  var GEO = [
+    ['Яндекс Навигатор', 'Ведение по маршруту: манёвр сверху, время и расстояние снизу. Реклама живёт на самом маршруте и в нижней части экрана.', 's-route s-nav s-banner'],
+    ['Яндекс Метро', 'Схема линий и маршрут поездки. Реклама показывается в приложении, пока человек планирует путь и едет.', 's-metro s-banner'],
+    ['Яндекс Карты', 'Поиск мест рядом. Реклама встроена прямо в карту и в карточки организаций — там, где выбирают, куда пойти.', 's-pin s-bill'],
+    ['Пин в Картах', 'Ваш логотип на карте вместо обычной точки. Пин заметен издалека и ведёт в карточку организации.', 's-pin'],
+    ['Премиум-пин в Картах', 'Увеличенный пин с логотипом, который виден даже на мелком масштабе карты.', 's-pin s-pinbig'],
+    ['Билборд в Картах', 'Значок на карте и рекламная карточка по нажатию: акция, кнопка и маршрут до точки.', 's-bill'],
+    ['Премиум-билборд', 'Билборд с приоритетным показом и расширенной карточкой: оффер, фото и кнопки действия.', 's-bill s-billbig'],
+    ['Баннер в Картах', 'Баннер в нижней части экрана при поиске по рубрике рядом с вашей точкой.', 's-banner'],
+    ['Премиум-баннер', 'Крупный баннер с изображением и кнопкой и приоритетом показа в районе.', 's-banner s-bannerbig'],
+    ['Баннер в Яндекс Метро', 'Баннер в приложении Метро во время поездки — пока человек едет мимо вашей точки.', 's-metro s-banner s-bannerbig'],
+    ['Рекомендация маршрута', 'Человек строит маршрут, а навигатор предлагает заехать к вам по пути.', 's-route s-nav s-reco'],
+    ['Брендирование маршрута', 'Цвет и логотип бренда прямо на линии маршрута в навигаторе.', 's-route s-brand s-nav'],
+    ['Премиум-брендирование', 'Брендированный маршрут плюс баннер и приоритетные показы на всём пути.', 's-route s-brand s-banner'],
+    ['3D-модель в Картах', 'Объёмная модель здания или логотипа на карте — заметна при просмотре района.', 's-3d s-pin']
+  ];
+  var geo = document.querySelector('.js-geo');
+  var tabs = document.querySelectorAll('.fxtab');
+  if (geo && tabs.length) {
+    var gt = document.querySelector('.js-tab-title'), gd = document.querySelector('.js-tab-desc');
+    var showGeo = function (i) {
+      tabs.forEach(function (t, k) { t.classList.toggle('is-active', k === i); t.setAttribute('aria-selected', String(k === i)); });
+      var f = GEO[i] || GEO[0];
+      if (gt) gt.textContent = f[0];
+      if (gd) gd.textContent = f[1];
+      geo.className = 'geo js-geo';
+      void geo.offsetWidth; // restart CSS animations
+      geo.className = 'geo js-geo ' + f[2];
+    };
+    tabs.forEach(function (t, i) { t.setAttribute('role', 'tab'); t.addEventListener('click', function () { showGeo(i); }); });
+    showGeo(0);
+  }
+
+  /* ---------- FAQ: one open at a time per grid; grow fixed-height stages to fit ---------- */
   document.querySelectorAll('.faq__grid, .js-accordion').forEach(function (grid) {
+    var stage = grid.closest('.stage');
+    var base = stage ? parseFloat(stage.style.height) || stage.offsetHeight : 0;
     grid.addEventListener('toggle', function (e) {
-      if (!e.target.open) return;
-      grid.querySelectorAll('details[open]').forEach(function (d) { if (d !== e.target) d.open = false; });
+      if (e.target.open) grid.querySelectorAll('details[open]').forEach(function (d) { if (d !== e.target) d.open = false; });
+      if (stage && grid.classList.contains('fxq-list') && getComputedStyle(grid).position === 'absolute') {
+        var need = grid.offsetTop + grid.offsetHeight + 60;
+        stage.style.height = Math.max(base, need) + 'px';
+      }
     }, true);
   });
 
@@ -222,7 +262,7 @@
       form.querySelectorAll('.is-invalid').forEach(function (el) { el.classList.remove('is-invalid'); });
       ['name', 'contact'].forEach(function (n) {
         var f = form.elements[n];
-        if (f && !f.value.trim()) { f.closest('.field').classList.add('is-invalid'); ok = false; }
+        if (f && !f.value.trim()) { (f.closest('.field, .f2, .f3') || f).classList.add('is-invalid'); ok = false; }
       });
       var consent = form.elements.consent;
       if (consent && !consent.checked) { consent.closest('.consent').classList.add('is-invalid'); ok = false; }

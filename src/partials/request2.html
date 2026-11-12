@@ -1,0 +1,38 @@
+<section class="section request2" id="request" aria-labelledby="request-title">
+  <div class="stage" style="height:1100px">
+    <img class="bgword" src="{{root}}assets/img/word-nachnem.svg" alt="" style="left:600px">
+    <h2 class="request2__title" id="request-title">{{title}}</h2>
+    <p class="request2__lead">{{lead}}</p>
+    <ul class="request2__terms">
+      <li>Ответим в течение 40 минут в рабочее время</li>
+      <li>Скажем прямо, если задача не наша</li>
+      <li>Разбор остаётся у вас, даже если не сработаемся</li>
+    </ul>
+    <p class="request2__contacts">Telegram: <a href="https://t.me/stpug" target="_blank" rel="noopener">@stpug</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:info@teamforbiz.ru">info@teamforbiz.ru</a></p>
+    <img class="request2__chars" src="{{root}}assets/img/app-characters.png" alt="" loading="lazy">
+
+    <form class="request2__form js-lead-form" action="{{root}}php/lead.php" method="post" novalidate>
+      <input type="hidden" name="page" value="">
+      <input type="hidden" name="interest[]" value="{{service}}">
+      <label class="f2"><span class="f2__label">Как вас зовут</span>
+        <input type="text" name="name" placeholder="Как вас зовут" autocomplete="name" required maxlength="100">
+      </label>
+      <label class="f2"><span class="f2__label">Телеграм, почта или телефон</span>
+        <input type="text" name="contact" placeholder="Телеграм, почта или телефон" autocomplete="tel" required maxlength="150">
+      </label>
+      <label class="f2"><span class="f2__label">Ориентир по бюджету</span>
+        <input type="text" name="budget" placeholder="Ориентир по бюджету" maxlength="100">
+      </label>
+      <label class="f2 f2--area"><span class="f2__label">Коротко о задаче</span>
+        <textarea name="task" placeholder="Коротко о задаче" maxlength="3000"></textarea>
+      </label>
+      <label class="consent consent2">
+        <input type="checkbox" name="consent" value="1" required>
+        <span>Согласен на обработку персональных данных и принимаю <a href="{{root}}privacy/" target="_blank">политику конфиденциальности</a></span>
+      </label>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="request2__submit" type="submit">Получить разбор задачи</button>
+      <p class="request__status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>

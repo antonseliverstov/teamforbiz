@@ -1,0 +1,43 @@
+<section class="section request3" id="request" aria-labelledby="request-title">
+  <div class="stage" style="height:1100px">
+    <img class="bgword" src="{{root}}assets/img/word-nachnem2.svg" alt="" style="left:600px">
+    <img class="deco" src="{{root}}assets/img/stair-mini.svg" alt="" style="left:1326px;top:17.4px">
+    <i class="bar" style="left:70px;top:117px;width:34px;height:3px;border-radius:2px;background:#ff9a18"></i>
+    <h2 class="request3__title" id="request-title">{{t1}}<br><span class="red">{{t2}}</span></h2>
+    <p class="request3__lead">{{lead}}</p>
+    <ul class="request3__terms">
+      <li>Ответим в течение 40 минут в рабочее время</li>
+      <li>Скажем прямо, если задача не наша</li>
+      <li>Разбор остаётся у вас, даже если не сработаемся</li>
+    </ul>
+    <div class="request3__links">
+      <a class="btn3 btn3--hot" href="https://t.me/stpug" target="_blank" rel="noopener" style="width:220px">Telegram</a>
+      <a class="btn3 btn3--ghost" href="mailto:info@teamforbiz.ru" style="width:260px">info@teamforbiz.ru</a>
+    </div>
+    <img class="request3__chars" src="{{root}}assets/img/app-characters.png" alt="" loading="lazy">
+
+    <form class="request3__form js-lead-form" action="{{root}}php/lead.php" method="post" novalidate>
+      <input type="hidden" name="page" value="">
+      <input type="hidden" name="interest[]" value="{{service}}">
+      <label class="f3"><span class="f3__label">Как вас зовут</span>
+        <input type="text" name="name" placeholder="Как вас зовут" autocomplete="name" required maxlength="100">
+      </label>
+      <label class="f3"><span class="f3__label">Телеграм, почта или телефон</span>
+        <input type="text" name="contact" placeholder="Телеграм, почта или телефон" autocomplete="tel" required maxlength="150">
+      </label>
+      <label class="f3"><span class="f3__label">Ориентир по бюджету</span>
+        <input type="text" name="budget" placeholder="Ориентир по бюджету" maxlength="100">
+      </label>
+      <label class="f3 f3--area"><span class="f3__label">Коротко о задаче</span>
+        <textarea name="task" placeholder="Коротко о задаче" maxlength="3000"></textarea>
+      </label>
+      <label class="consent consent3">
+        <input type="checkbox" name="consent" value="1" required>
+        <span>Согласен на обработку персональных данных и принимаю <a href="{{root}}privacy/" target="_blank">политику конфиденциальности</a></span>
+      </label>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="request3__submit" type="submit">Получить разбор задачи</button>
+      <p class="request__status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>

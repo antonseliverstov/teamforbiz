@@ -22,6 +22,7 @@ function field($k, $max) {
 $name    = field('name', 100);
 $contact = field('contact', 150);
 $task    = field('task', 3000);
+$budget  = field('budget', 100);
 $page    = field('page', 300);
 $consent = !empty($_POST['consent']);
 $interest = [];
@@ -45,6 +46,7 @@ $lines = [
     'Имя: ' . $name,
     'Контакт: ' . $contact,
     'Интересует: ' . ($interest ? implode(', ', $interest) : '—'),
+    'Бюджет: ' . ($budget !== '' ? $budget : '—'),
     'Задача: ' . ($task !== '' ? $task : '—'),
     '',
     'Страница: ' . $page,
@@ -62,7 +64,7 @@ $headers = implode("\r\n", [
 $sent = @mail(LEAD_TO, $subject, implode("\n", $lines), $headers, '-f' . LEAD_FROM);
 
 // keep a local copy in case mail delivery fails
-@file_put_contents(__DIR__ . '/leads.log', date('c') . ' ' . json_encode(compact('name', 'contact', 'interest', 'task', 'page'), JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
+@file_put_contents(__DIR__ . '/leads.log', date('c') . ' ' . json_encode(compact('name', 'contact', 'interest', 'budget', 'task', 'page'), JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
 
 if (!$sent) { http_response_code(500); out(false, 'mail'); }
 out(true);

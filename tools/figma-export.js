@@ -7,7 +7,7 @@ const os = require('os');
 const path = require('path');
 
 const FILE_KEY = 'WKQfbiHqlnQvXMcN48rn6A';
-const out = path.resolve(__dirname, '..', 'assets', 'img');
+const out = process.env.OUT_DIR ? path.resolve(process.env.OUT_DIR) : path.resolve(__dirname, '..', 'assets', 'img');
 const tokenFile = ['.figma_token', '.figma_token.txt'].map(f => path.join(os.homedir(), f)).find(fs.existsSync);
 if (!tokenFile) throw new Error('No ~/.figma_token file');
 const TOKEN = fs.readFileSync(tokenFile, 'utf8').replace(/^﻿/, '').trim();
