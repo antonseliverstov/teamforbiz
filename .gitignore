@@ -1,0 +1,5 @@
+dist/
+.shots/
+tools/.cache/
+node_modules/
+php/leads.log

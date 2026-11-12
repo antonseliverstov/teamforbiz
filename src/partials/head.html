@@ -1,0 +1,25 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TeamForBiz">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{description}}">
+<meta name="theme-color" content="#fafaf8">
+<link rel="icon" href="{{root}}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;800&family=Unbounded:wght@700&display=swap">
+<link rel="stylesheet" href="{{root}}assets/css/main.css">
+<script>
+  // Desktop canvas is 1440px (Figma). Between 1024 and 1439px scale it proportionally so it stays 1:1 with the design.
+  (function () {
+    function fit() {
+      var w = document.documentElement.clientWidth || window.innerWidth;
+      document.documentElement.style.setProperty('--z', w >= 1024 && w < 1440 ? (w / 1440).toFixed(4) : 1);
+      document.documentElement.classList.toggle('is-scaled', w >= 1024 && w < 1440);
+    }
+    fit(); window.addEventListener('resize', fit);
+  })();
+</script>

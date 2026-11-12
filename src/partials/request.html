@@ -1,0 +1,50 @@
+<section class="section request" id="request" aria-labelledby="request-title">
+  <div class="stage request__stage">
+    <img class="stair" src="{{root}}assets/img/app-stair.svg" alt="" style="left:-197px;top:700px">
+    <h2 class="request__title" id="request-title">{{title}}</h2>
+    <p class="request__lead">{{lead}}</p>
+    <div class="request__art" aria-hidden="true">
+      <img class="request__bubble" src="{{root}}assets/img/app-bubble.png" alt="">
+      <img class="request__tail" src="{{root}}assets/img/app-bubble-tail.svg" alt="">
+      <img class="request__chars" src="{{root}}assets/img/app-characters.png" alt="" loading="lazy">
+    </div>
+    <ul class="request__terms">
+      <li>Ответим в течение 40 минут в рабочее время</li>
+      <li>Скажем прямо, если задача не наша</li>
+      <li>Разбор остаётся у вас, даже если не сработаемся</li>
+    </ul>
+
+    <form class="request__form js-lead-form" action="{{root}}php/lead.php" method="post" novalidate>
+      <input type="hidden" name="page" value="">
+      <label class="field"><span class="visually-hidden">Как вас зовут</span>
+        <input type="text" name="name" placeholder="Как вас зовут" autocomplete="name" required maxlength="100">
+      </label>
+      <label class="field"><span class="visually-hidden">Телеграм, почта или телефон</span>
+        <input type="text" name="contact" placeholder="Телеграм, почта или телефон" autocomplete="tel" required maxlength="150">
+      </label>
+      <fieldset class="chips">
+        <legend class="chips__label">Что интересует</legend>
+        <label class="chip"><input type="checkbox" name="interest[]" value="Маркетинг" {{c-marketing}}><span>Маркетинг</span></label>
+        <label class="chip"><input type="checkbox" name="interest[]" value="SEO" {{c-seo}}><span>SEO</span></label>
+        <label class="chip"><input type="checkbox" name="interest[]" value="Сайты и веб-сервисы" {{c-web}}><span>Сайты и веб-сервисы</span></label>
+        <label class="chip"><input type="checkbox" name="interest[]" value="Контекстная реклама" {{c-context}}><span>Контекстная реклама</span></label>
+        <label class="chip"><input type="checkbox" name="interest[]" value="Таргетированная реклама" {{c-target}}><span>Таргетированная реклама</span></label>
+        <label class="chip"><input type="checkbox" name="interest[]" value="SMM" {{c-smm}}><span>SMM</span></label>
+        <label class="chip"><input type="checkbox" name="interest[]" value="Реклама на картах" {{c-maps}}><span>Реклама на картах</span></label>
+        <label class="chip"><input type="checkbox" name="interest[]" value="ПромоСтраницы" {{c-promo}}><span>ПромоСтраницы</span></label>
+        <label class="chip"><input type="checkbox" name="interest[]" value="Управление репутацией бренда" {{c-serm}}><span>Управление репутацией бренда</span></label>
+        <p class="chips__hint">Можно выбрать несколько или не выбирать вовсе</p>
+      </fieldset>
+      <label class="field field--area"><span class="visually-hidden">Коротко о задаче</span>
+        <textarea name="task" placeholder="Коротко о задаче" maxlength="3000"></textarea>
+      </label>
+      <label class="consent">
+        <input type="checkbox" name="consent" value="1" required>
+        <span>Согласен на обработку персональных данных и принимаю<br class="d-only"> <a href="{{root}}privacy/" target="_blank">политику конфиденциальности</a></span>
+      </label>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="request__submit" type="submit">Получить разбор задачи</button>
+      <p class="request__status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
